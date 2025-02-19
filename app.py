@@ -68,9 +68,11 @@ else:
             current_index += 1
 
     question_content = questions[str(current_index)]['question']
-    st.markdown(f"### Question {current_index + 1}")
+    question_part = questions[str(current_index)]['part']
+    st.markdown(f"### Часть {question_part}")
+    st.markdown(f"##### Вопрос {current_index + 1}")
     st.markdown(f"{question_content}")
-    st.markdown(f" \n \n")
+    st.markdown(f" \n  \n  ")
 
     update_shared_state(conn=conn, value=current_index)
 
