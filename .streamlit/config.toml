@@ -1,0 +1,12 @@
+# Set the layout mode to wide
+[server]
+runOnSave = true
+
+
+# Theme settings
+[theme]
+primaryColor = "#741CC1"
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#262730"
+textColor = "#FAFAFA"
+font = "sans serif"

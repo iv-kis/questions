@@ -1,16 +1,16 @@
+import sys
+
 import streamlit as st
 import sqlite3
-import pandas as pd
+import json
 import numpy as np
 
+def load_questions(file_path):
+    with open(file_path, 'r') as file:
+        questions = json.load(file)
+    return questions
 
-#df = pd.read_csv('messages.csv')
-messages = ['message 1','message 2', 'message 3', 'message 4']
-
-def get_random_message_index():
-    return np.random.randint(0, len(messages))
-
-def get_shared_state(conn):
+def get_shared_state(conn) -> int:
     c = conn.cursor()
     c.execute('SELECT current_index FROM state WHERE id = 1')
     return c.fetchone()[0]
@@ -33,13 +33,21 @@ if not c.execute('SELECT COUNT(*) FROM state').fetchone()[0]:
     c.execute('INSERT INTO state (id, current_index) VALUES (?, ?)', (1, 0))
     conn.commit()
 
+st.set_page_config(layout="wide")
 st.title('Questions')
 
-if 'button_clicked' not in st.session_state:
-    st.session_state.button_clicked = False
-    if st.button("Start", key="start_button"):
-        st.session_state.button_clicked = True
+initial_state = get_shared_state(conn=conn)
+
+if 'start_button_clicked' not in st.session_state:
+    st.session_state.start_button_clicked = False
+
+if not st.session_state.start_button_clicked and initial_state == 0:
+    if st.button(f"Start", key="start_button"):
+        st.session_state.start_button_clicked = True
+        st.rerun()
+
 else:
+    questions = load_questions('questions.json')
     cols = st.columns([0.6, 0.4, 2, 0.5], gap='small')
     cols[0].button('Previous    ', key='prev_button', use_container_width=True)
     cols[1].button('Next    ', key='next_button', use_container_width=True)
@@ -53,14 +61,24 @@ else:
 
     if 'random_button' in st.session_state:
         if st.session_state.random_button:
-            current_index = get_random_message_index()
+            current_index = np.random.randint(0, len(questions))
 
     if 'next_button' in st.session_state:
-        if st.session_state.next_button and current_index < len(messages) - 1:
+        if st.session_state.next_button and current_index < len(questions) - 1:
             current_index += 1
+
+    question_content = questions[str(current_index)]['question']
+    st.markdown(f"### Question {current_index + 1}")
+    st.markdown(f"{question_content}")
+    st.markdown(f" \n \n")
 
     update_shared_state(conn=conn, value=current_index)
 
-    st.text_area('Question', f"{messages[current_index]}", height=200, disabled=True)
-
-conn.close()
+    cols2 = st.columns([3, 0.5], gap='small')
+    cols2[0].write('')
+    cols2[1].button('Finish    ', key='finish_button', use_container_width=True)
+    if st.session_state.finish_button:
+        update_shared_state(conn=conn, value=0)
+        st.session_state.start_button_clicked = False
+        conn.close()
+        st.rerun()
