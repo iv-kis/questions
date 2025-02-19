@@ -56,14 +56,17 @@ else:
     if 'prev_button' in st.session_state:
         if st.session_state.prev_button and current_index > 0:
             current_index -= 1
+            st.rerun()
 
     if 'random_button' in st.session_state:
         if st.session_state.random_button:
             current_index = np.random.randint(0, len(questions))
+            st.rerun()
 
     if 'next_button' in st.session_state:
         if st.session_state.next_button and current_index < len(questions) - 1:
             current_index += 1
+            st.rerun()
 
     question_content = questions[str(current_index)]['question']
     question_part = questions[str(current_index)]['part']
