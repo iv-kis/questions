@@ -17,7 +17,7 @@ SHOW_MESSAGE_SECONDS = 1
 ABOUT = (
     f'### personalquestions  '
     f'\nApache 2.0 Licence, 2025.  '
-    f'\n\nGet-to-know personal questions, inspired by "Arthur Aron´s 36 questions"'
+    f'\n\nGet-to-know personal questions, inspired by "Arthur Aron´s 36 questions"  '
     f'\nv. {VERSION}  '
     f'\n#### Author  \n_ivkis_  \nt.helsing.t@gmail.com  '
     f'\n#### Powered by  '
