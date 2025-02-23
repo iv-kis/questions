@@ -2,20 +2,31 @@ import streamlit as st
 import sqlite3
 import json
 import numpy as np
+from sqlite3 import Connection
 
 def load_questions(file_path):
     with open(file_path, 'r') as file:
         questions = json.load(file)
     return questions
 
-def get_shared_state(conn) -> int:
+def get_shared_state(conn: Connection) -> int:
     c = conn.cursor()
     c.execute('SELECT current_index FROM state WHERE id = 1')
-    return c.fetchone()[0]
+    return c.fetchone()['current_index']
 
-def update_shared_state(conn, value):
+def update_shared_state(conn: Connection, value):
     c = conn.cursor()
     c.execute('UPDATE state SET current_index = ? WHERE id = 1', (value,))
+    conn.commit()
+
+def get_started_state(conn: Connection) -> int:
+    c = conn.cursor()
+    c.execute('SELECT started FROM state WHERE id = 1')
+    return c.fetchone()['started']
+
+def update_started_state(conn: Connection, value):
+    c = conn.cursor()
+    c.execute('UPDATE state SET started = ? WHERE id = 1', (value,))
     conn.commit()
 
 conn = sqlite3.connect('shared_state.db')
@@ -23,25 +34,28 @@ c = conn.cursor()
 c.execute('''
 CREATE TABLE IF NOT EXISTS state (
     id INTEGER PRIMARY KEY,
-    current_index INTEGER
+    current_index INTEGER,
+    started INTEGER
 )
 ''')
 
 if not c.execute('SELECT COUNT(*) FROM state').fetchone()[0]:
-    c.execute('INSERT INTO state (id, current_index) VALUES (?, ?)', (1, 0))
+    c.execute('INSERT INTO state (id, current_index, started) VALUES (?, ?, ?)', (1, 0, 0))
     conn.commit()
 
 st.set_page_config(layout="wide")
 st.title('Questions')
 
 initial_state = get_shared_state(conn=conn)
+started = get_started_state(conn=conn)
 
-if 'start_button_clicked' not in st.session_state:
+if not started:
     st.session_state.start_button_clicked = False
 
 if not st.session_state.start_button_clicked and initial_state == 0:
     if st.button(f"Start", key="start_button"):
         st.session_state.start_button_clicked = True
+        update_started_state(conn=conn, value=1)
         st.rerun()
 
 else:
@@ -80,5 +94,6 @@ else:
     if st.session_state.finish_button:
         update_shared_state(conn=conn, value=0)
         st.session_state.start_button_clicked = False
+        update_started_state(conn=conn, value=0)
         conn.close()
         st.rerun()
