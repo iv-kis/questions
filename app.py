@@ -4,6 +4,8 @@ import json
 import numpy as np
 from sqlite3 import Connection
 
+from streamlit_autorefresh import st_autorefresh
+
 def load_questions(file_path):
     with open(file_path, 'r') as file:
         questions = json.load(file)
@@ -94,3 +96,5 @@ else:
         c.execute('DROP TABLE IF EXISTS state')
         conn.close()
         st.rerun()
+
+count = st_autorefresh(interval=2000, key="auto_refresh")
