@@ -9,12 +9,19 @@ from sqlite3 import Connection
 import numpy as np
 from streamlit_autorefresh import st_autorefresh
 
-
+VERSION = '0.0.1'
 N_ATTEMPTS = 10
 EXPIRY_DAYS = 7
 SESSIONS_LIMIT = 1000
 SHOW_MESSAGE_SECONDS = 1
-
+ABOUT = (
+    f'### personalquestions  '
+    f'\nApache 2.0 Licence, 2025.  '
+    f'\n\nGet-to-know personal questions, inspired by "Arthur Aron´s 36 questions"'
+    f'\nv. {VERSION}  '
+    f'\n#### Author  \n_ivkis_  \nt.helsing.t@gmail.com  '
+    f'\n#### Powered by  '
+)
 
 def adapt_datetime(dt):
     return dt.strftime('%Y-%m-%d %H:%M:%S')
@@ -125,10 +132,7 @@ CREATE TABLE IF NOT EXISTS state (
 st.set_page_config(
     layout="wide",
     menu_items={
-        'About': '\n### personalquestions  \nApache 2.0 Licence, 2025.  '
-                 '\n\nGet-to-know personal questions, inspired by "Arthur Aron´s 36 questions"'
-                 '\n#### Author  \n_ivkis_  \nt.helsing.t@gmail.com  '
-                 '\n#### Powered by  '
+        'About': ABOUT
     }
 )
 st.title('Questions')
