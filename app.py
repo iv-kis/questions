@@ -10,6 +10,7 @@ def load_questions(file_path):
     return questions
 
 def get_shared_state(conn: Connection) -> int:
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
     c.execute('SELECT current_index FROM state WHERE id = 1')
     return c.fetchone()['current_index']
@@ -20,6 +21,7 @@ def update_shared_state(conn: Connection, value):
     conn.commit()
 
 def get_started_state(conn: Connection) -> int:
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
     c.execute('SELECT started FROM state WHERE id = 1')
     return c.fetchone()['started']
