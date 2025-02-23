@@ -51,15 +51,10 @@ st.title('Questions')
 initial_state = get_shared_state(conn=conn)
 started = get_started_state(conn=conn)
 
-if not started:
-    st.session_state.start_button_clicked = False
-
-if not st.session_state.start_button_clicked and initial_state == 0:
+if not started and initial_state == 0:
     if st.button(f"Start", key="start_button"):
-        st.session_state.start_button_clicked = True
         update_started_state(conn=conn, value=1)
         st.rerun()
-
 else:
     questions = load_questions('questions.json')
     cols = st.columns([0.6, 0.4, 2, 0.5], gap='small')
@@ -95,7 +90,7 @@ else:
     cols2[1].button('Finish    ', key='finish_button', use_container_width=True)
     if st.session_state.finish_button:
         update_shared_state(conn=conn, value=0)
-        st.session_state.start_button_clicked = False
         update_started_state(conn=conn, value=0)
+        c.execute('DROP TABLE IF EXISTS state')
         conn.close()
         st.rerun()
