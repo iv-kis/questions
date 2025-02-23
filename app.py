@@ -15,7 +15,7 @@ EXPIRY_DAYS = 7
 SESSIONS_LIMIT = 1000
 SHOW_MESSAGE_SECONDS = 1
 ABOUT = (
-    f'### personalquestions  '
+    f'#### personalquestions  '
     f'\nApache 2.0 Licence, 2025.  '
     f'\n\nGet-to-know personal questions, inspired by "Arthur Aron´s 36 questions"  '
     f'\nv. {VERSION}  '
