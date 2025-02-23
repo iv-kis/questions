@@ -125,7 +125,10 @@ CREATE TABLE IF NOT EXISTS state (
 st.set_page_config(
     layout="wide",
     menu_items={
-        'About': 'Apache 2.0 Licence, 2025.  \n#### Author  \n_ivkis_  \nt.helsing.t@gmail.com  \n#### Powered by  '
+        'About': '\n### personalquestions  \nApache 2.0 Licence, 2025.  '
+                 '\n\nGet-to-know personal questions, inspired by "Arthur Aron´s 36 questions"'
+                 '\n#### Author  \n_ivkis_  \nt.helsing.t@gmail.com  '
+                 '\n#### Powered by  '
     }
 )
 st.title('Questions')
