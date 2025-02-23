@@ -2,8 +2,6 @@
 [server]
 runOnSave = true
 
-[client]
-
 # Theme settings
 [theme]
 primaryColor = "#741CC1"

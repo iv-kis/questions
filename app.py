@@ -122,7 +122,12 @@ CREATE TABLE IF NOT EXISTS state (
 )
 ''')
 
-st.set_page_config(layout="wide")
+st.set_page_config(
+    layout="wide",
+    menu_items={
+        'About': 'Apache 2.0 Licence, 2025.  \n#### Author  \n_ivkis_  \nt.helsing.t@gmail.com  \n#### Powered by  '
+    }
+)
 st.title('Questions')
 
 if 'session_id' not in st.session_state:
